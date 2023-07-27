@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CID Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+        }
+        #cid-form, #result {
+            max-width: 800px;
+            width: 100%;
+            padding: 20px;
+            margin: 40px auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #fff;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.05);
+        }
+        #cid-input {
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <form id="cid-form">
+        <label for="cid-input">Enter CIDv1:</label><br>
+        <input type="text" id="cid-input" name="cid-input" required><br>
+        <input type="submit" value="Convert">
+    </form>
+    <p id="result"></p>
+
+    <script type="module">
+        import { CID } from 'https://cdn.skypack.dev/multiformats?min'
+    
+        const cidForm = document.getElementById('cid-form');
+        const cidInput = document.getElementById('cid-input');
+        const result = document.getElementById('result');
+    
+        cidForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+    
+            var cidv1 = CID.parse(cidInput.value);
+            var cidv0;
+    
+            try {
+                cidv0 = cidv1.toV0().toString();
+            } catch (err) {
+                result.innerText = 'Error converting to CIDv0. CIDv1 may use features not available in CIDv0.';
+                return;
+            }
+    
+            result.innerText = 'CIDv0: ' + cidv0;
+        });
+    </script>
+</body>
+</html>
